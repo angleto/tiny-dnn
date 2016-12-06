@@ -3,11 +3,13 @@
 </div>
 -----------------
 
-| **`Linux/Mac OS`** | **`Windows`** ||
-|------------------|-------------|---------------|
-|[![Build Status](https://travis-ci.org/tiny-dnn/tiny-dnn.svg?branch=master)](https://travis-ci.org/tiny-dnn/tiny-dnn)|[![Build status](https://ci.appveyor.com/api/projects/status/a5syoifm8ct7b4l2?svg=true)](https://ci.appveyor.com/project/tinydnn/tiny-dnn)| [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://raw.githubusercontent.com/tiny-dnn/tiny-dnn/master/LICENSE) [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](http://tiny-dnn.readthedocs.io/) [![Coverage Status](https://coveralls.io/repos/github/tiny-dnn/tiny-dnn/badge.svg?branch=master)](https://coveralls.io/github/tiny-dnn/tiny-dnn?branch=master)|
+[![Join the chat at https://gitter.im/tiny-dnn/users](https://badges.gitter.im/tiny-dnn/users.svg)](https://gitter.im/tiny-dnn/users) [![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](http://tiny-dnn.readthedocs.io/) [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://raw.githubusercontent.com/tiny-dnn/tiny-dnn/master/LICENSE) [![Coverage Status](https://coveralls.io/repos/github/tiny-dnn/tiny-dnn/badge.svg?branch=master)](https://coveralls.io/github/tiny-dnn/tiny-dnn?branch=master)
 
 **tiny-dnn** is a C++11 implementation of deep learning. It is suitable for deep learning on limited computational resource, embedded systems and IoT devices.
+
+| **`Linux/Mac OS`** | **`Windows`** |
+|------------------|-------------|
+|[![Build Status](https://travis-ci.org/tiny-dnn/tiny-dnn.svg?branch=master)](https://travis-ci.org/tiny-dnn/tiny-dnn)|[![Build status](https://ci.appveyor.com/api/projects/status/a5syoifm8ct7b4l2?svg=true)](https://ci.appveyor.com/project/tinydnn/tiny-dnn)|
 
 ## Table of contents
 
@@ -20,11 +22,12 @@
 * [Contributing](#contributing)
 * [References](#references)
 * [License](#license)
-* [Mailing list](#mailing-list)
+* [Gitter rooms](#gitter-rooms)
 
 Check out the [documentation](http://tiny-dnn.readthedocs.io/) for more info.
 
 ## What's New
+- 2016/11/30 [v1.0.0a3 is released!](https://github.com/tiny-dnn/tiny-dnn/tree/v1.0.0a3)
 - 2016/9/14 [tiny-dnn v1.0.0alpha is released!](https://github.com/tiny-dnn/tiny-dnn/releases/tag/v1.0.0a)
 - 2016/8/7  tiny-dnn is now moved to organization account, and rename into tiny-dnn :)
 - 2016/7/27 [tiny-dnn v0.1.1 released!](https://github.com/tiny-dnn/tiny-dnn/releases/tag/v0.1.1)
@@ -46,16 +49,21 @@ Check out the [documentation](http://tiny-dnn.readthedocs.io/) for more info.
 
 ## Comparison with other libraries
 
-||tiny-dnn|[caffe](https://github.com/BVLC/caffe)|[Theano](https://github.com/Theano/Theano)|[TensorFlow](https://www.tensorflow.org/)|
-|---|---|---|---|---|
-|Prerequisites|__Nothing__(Optional:TBB,OpenMP)|BLAS,Boost,protobuf,glog,gflags,hdf5, (Optional:CUDA,OpenCV,lmdb,leveldb etc)|Numpy,Scipy,BLAS,(optional:nose,Sphinx,CUDA etc)|numpy,six,protobuf,(optional:CUDA,Bazel)|
-|Modeling By|C++ code|Config File|Python Code|Python Code|
-|GPU Support|No|Yes|Yes|Yes|
-|Installing|Unnecessary|Necessary|Necessary|Necessary|
-|Windows Support|Yes|No*|Yes|No*|
-|Pre-Trained Model|Yes(via caffe-converter)|Yes|No*|No*|
+||tiny-dnn|[caffe](https://github.com/BVLC/caffe)|[Theano](https://github.com/Theano/Theano)|[TensorFlow](https://www.tensorflow.org/)|[Mxnet](http://mxnet.io/)|
+|---|---|---|---|---|---|
+|Prerequisites|__Nothing__(Optional:TBB,OpenMP)|BLAS,Boost,protobuf,glog,gflags,hdf5, (Optional:CUDA,OpenCV,lmdb,leveldb etc)|Numpy,Scipy,BLAS,(optional:nose,Sphinx,CUDA etc)|numpy,six,protobuf,(optional:CUDA,Bazel)|BLAS(optional:CUDA)|
+|Modeling By|C++ code|Config File|Python Code|Python Code|C++, Python, R, Julia ...|
+|Training|C++|C++, Python|Python|Python|C++, Python, R, Julia ...|
+|Execution|C++|C++, Python|Python|Python, C++<sup>2</sup>|C++<sup>4</sup>, Python, R, Julia ...|
+|GPU Support|No|Yes|Yes|Yes|Yes|
+|Installing|Unnecessary|Necessary|Necessary|Necessary|Necessary<sup>3</sup>|
+|Windows Support|Yes|No|Yes|Yes|Yes|
+|Pre-Trained Model|Yes(via caffe-converter)|Yes|No<sup>1</sup>|No<sup>1</sup>|Yes(via caffe-converter)|
 
-*unofficial version is available
+<sup>1</sup> unofficial version is available  
+<sup>2</sup> limited C++ API  
+<sup>3</sup> It is rumoured installation is unnecessary with the Mxnet amalgamation Api  
+<sup>4</sup> both full API and limited api via amalgamation  
 
 ## Supported networks
 ### layer-types
@@ -101,11 +109,7 @@ Check out the [documentation](http://tiny-dnn.readthedocs.io/) for more info.
 * adam
 
 ## Dependencies
-##### Minimum requirements
 Nothing. All you need is a C++11 compiler.
-
-##### Requirements to build sample/test programs
-[OpenCV](http://opencv.org/)
 
 ## Build
 tiny-dnn is header-ony, so *there's nothing to build*. If you want to execute sample program or unit tests, you need to install [cmake](https://cmake.org/) and type the following commands:
@@ -120,25 +124,27 @@ Some cmake options are available:
 
 |options|description|default|additional requirements to use|
 |-----|-----|----|----|
-|USE_TBB|Use [Intel TBB](https://www.threadingbuildingblocks.org/) for parallelization|OFF*1|[Intel TBB](https://www.threadingbuildingblocks.org/)|
-|USE_OMP|Use OpenMP for parallelization|OFF*1|[OpenMP Compiler](http://openmp.org/wp/openmp-compilers/)|
+|USE_TBB|Use [Intel TBB](https://www.threadingbuildingblocks.org/) for parallelization|OFF<sup>1</sup>|[Intel TBB](https://www.threadingbuildingblocks.org/)|
+|USE_OMP|Use OpenMP for parallelization|OFF<sup>1</sup>|[OpenMP Compiler](http://openmp.org/wp/openmp-compilers/)|
 |USE_SSE|Use Intel SSE instruction set|ON|Intel CPU which supports SSE|
 |USE_AVX|Use Intel AVX instruction set|ON|Intel CPU which supports AVX|
-|USE_OPENCV|Use OpenCV for sample/test programs|ON|[Open Source Computer Vision Library](http://opencv.org/)|
-|USE_SERIALIZER|Enable model serialization|ON*2|-|
-|BUILD_TESTS|Build unit tests|OFF|-*3|
-|BUILD_EXAMPLES|Build example projects|ON|-|
+|USE_NNPACK|Use NNPACK for convolution operation|OFF|[Acceleration package for neural networks on multi-core CPUs](https://github.com/Maratyszcza/NNPACK)|
+|USE_OPENCL|Enable/Disable OpenCL support (experimental)|OFF|[The open standard for parallel programming of heterogeneous systems](https://www.khronos.org/opencl/)|
+|USE_LIBDNN|Use Greentea LinDNN for convolution operation with GPU via OpenCL (experimental)|OFF|[An universal convolution implementation supporting CUDA and OpenCL](https://github.com/naibaf7/libdnn)|
+|USE_SERIALIZER|Enable model serialization|ON<sup>2</sup>|-|
+|BUILD_TESTS|Build unit tests|OFF<sup>3</sup>|-|
+|BUILD_EXAMPLES|Build example projects|OFF|-|
 |BUILD_DOCS|Build documentation|OFF|[Doxygen](http://www.doxygen.org/)|
 
-*1 tiny-dnn use c++11 standard library for parallelization by default
+<sup>1</sup> tiny-dnn use c++11 standard library for parallelization by default
 
-*2 If you don't use serialization, you can switch off to speedup compilation time.
+<sup>2</sup> If you don't use serialization, you can switch off to speedup compilation time.
 
-*3 tiny-dnn requires picotest as submodule. You need to use ```git submodule update --init``` command to run unit tests
+<sup>3</sup> tiny-dnn uses [Google Test](https://github.com/google/googletest) as default framework to run unit tests. No pre-installation required, it's  automatically downloaded during CMake configuration.
 
 For example, type the following commands if you want to use intel TBB and build tests:
 ```bash
-cmake -DUSE_TBB=ON -DBUILD_EXAMPLES=ON .
+cmake -DUSE_TBB=ON -DBUILD_TESTS=ON .
 ```
 
 ## Customize configurations
@@ -242,7 +248,17 @@ other useful reference lists:
 ## License
 The BSD 3-Clause License
 
-## Mailing list
-google group for questions and discussions:
+## Gitter rooms
+We have a gitter rooms for discussing new features & QA.
+Feel free to join us!
 
-https://groups.google.com/forum/#!forum/tiny-dnn-users
+<table>
+<tr>
+    <td><b> developers </b></td>
+    <td> https://gitter.im/tiny-dnn/developers </td>
+</tr>
+<tr>
+    <td><b> users </b></td>
+    <td> https://gitter.im/tiny-dnn/users </td>
+</tr>
+</table>
